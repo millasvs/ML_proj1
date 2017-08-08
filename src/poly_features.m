@@ -16,7 +16,7 @@ m = size(X, 1);
 
 for row = 1:m
   for col = 1:p
-    X_poly(row, col) = X(row, col).^col;
+    X_poly(row, col) = X(row).^col;
   end
 end
 
