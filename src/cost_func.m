@@ -3,18 +3,32 @@
 % for fitting the data points in X and y, with regularization
 % parameter lambda
 
-function J = cost_func(X, y, theta, lambda)
+function [J grad] = cost_func(X, y, theta, lambda)
 
-%  h = [ones(size(X, 1), 1) X] * theta;
   m = size(X, 1);
-
   J = sum( (X * theta - y).^2 ) / (2 * m);
 
+  % add regularization
   reg = (lambda/(2*m)) * sum(theta.^2);
 
   J = J + reg;
 
 
+  
+  %%grad
+  hypothesis = X * theta;
+  diff = hypothesis - y;
+  grad = ( X' * diff ) / m;
+
+% add regularization to grad
+
+  theta(1) = 0;
+  grad_reg = (lambda*theta) / m;
+  grad = grad + grad_reg;
+
+  
+  
+  
   % alternative implementation
 
   %J = (1/(2*m)) * (X*theta-y)' * (X*theta-y);

@@ -6,8 +6,19 @@
 % as a means to test gradient descent with different learning rates
 % and verify that it's working.
 
-function [theta J_hist] = gradient_descent(X, y, init_theta, alpha, num_iters, lambda)
+function [theta J_hist] = gradient_descent(X, y, init_theta, options, lambda)
 
+% Read options
+if exist('options', 'var') && ~isempty(options)
+  if isfield(options, 'num_iters')
+    num_iters = options.num_iters;
+  endif  
+  if isfield(options, 'alpha')
+    alpha = options.alpha;
+  endif  
+else
+    num_iters = 100;
+end
 
     theta = init_theta;
     J_hist = zeros(num_iters, 1);

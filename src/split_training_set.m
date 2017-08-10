@@ -8,6 +8,13 @@
 function [X_train y_train X_cv y_cv X_test y_test] = ...
     split_training_set(X, y)
     
+  % shuffle the rows of X and y
+  all = [X y];
+  all = all(randperm(size(all,1)),:);
+  
+  X = all(:, 1:size(X,2));
+  y = all(:, size(X,2)+1:end);
+  
   m = size(X, 1); % number of training examples
   mtrain = ceil(0.6*m);
   mcv = floor((m-mtrain)/2) + mtrain + 1;
