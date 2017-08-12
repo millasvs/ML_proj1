@@ -1,0 +1,15 @@
+Practicing machine learning concepts -- proj2. 
+
+Using linear regression with gradient descent/normal equation
+with the "Computer Hardware" dataset from UCI to try to predict
+performance of different CPUs.
+
+Plots cost function as a function of the number of iterations.
+
+Debugging the learning algorithm using "learning curves", to see
+the cross validation error and test set error as a function of
+training set size.
+
+
+How to run:
+Run the project using Matlab or GNU Octave.

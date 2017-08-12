@@ -43,8 +43,9 @@ clear ; close all; clc
   % an intercept term
   n = size(X, 2); % number of features  
   initial_theta = [1 ; zeros(n-1, 1)];
-  options = optimset('num_iters', 400, 'alpha', 0.1, 'GradObj', 'on');
-
+  alpha = 0.1;
+  num_iters = 400;
+  
   [theta J_hist] = gradient_descent(X_train, y_train, ...
   initial_theta, alpha, num_iters, 0);
   %% plot the value of J_hist to see how the cost is decreasing
