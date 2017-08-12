@@ -21,7 +21,8 @@ function [theta J_hist] = gradient_descent(X, y, init_theta, alpha, num_iters, l
       end
       
       theta = theta - temp;
-      
+
+%TODO: introduce lambda to the regularization itself      
 %      reg = (lambda*theta) / m;
 
       

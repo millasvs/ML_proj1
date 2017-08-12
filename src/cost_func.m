@@ -7,7 +7,10 @@ function [J grad] = cost_func(X, y, theta, lambda)
 
   % compute cost (sum of squared errors)
   m = size(X, 1);
-  J = sum( (X * theta - y).^2 ) / (2 * m);
+%  J = sum( (X * theta - y).^2 ) / (2 * m);
+
+  % alternative implementation of cost :
+  J = (1/(2*m)) * (X*theta-y)' * (X*theta-y);
 
   % add regularization
   reg = (lambda/(2*m)) * sum(theta.^2);
@@ -19,13 +22,10 @@ function [J grad] = cost_func(X, y, theta, lambda)
   grad = ( X' * diff ) / m;
 
 % add regularization to grad
-
   theta(1) = 0;
   grad_reg = (lambda*theta) / m;
   grad = grad + grad_reg;
   
   
-  % alternative implementation of cost :
-  %J = (1/(2*m)) * (X*theta-y)' * (X*theta-y);
 
 end

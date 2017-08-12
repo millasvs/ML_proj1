@@ -1,69 +1,70 @@
-% A learning curve plots training and
-% cross validation error as a function of training set size.
+% A learning curve plots training and cross validation 
+% error as a function of training set size.
 % This function returns the training and cross validation
 % error as m x 1 vectors  for training set sizes of 1 ... m.
-% The training uses regularization parameter lambda.
+% The training uses regularization parameter lambda, and
+% for earch training set size i it chooses i random examples.
 function [error_train, error_val m] = ...
-    learning_curve(X_train, y_train, X_cv, y_cv, lambda)
+learning_curve(X_train, y_train, X_cv, y_cv, lambda)
 
-m_train = size(X_train, 1);
-m_cv = size(X_cv, 1);
+  m_train = size(X_train, 1);
+  m_cv = size(X_cv, 1);
 
-m = min(m_train, m_cv);
+  m = min(m_train, m_cv);
 
-error_train = zeros(m, 1);
-error_val   = zeros(m, 1);
+  error_train = zeros(m, 1);
+  error_val   = zeros(m, 1);
 
-%init_theta = [1 ; zeros(size(X_train, 2)-1, 1)];
+  init_theta = [1 ; zeros(size(X_train, 2)-1, 1)];
 
-     for i = 1:m
-      for j = 1:50
-         % Compute train/cross validation errors using training examples 
-         % X(1:i, :) and y(1:i), storing the result in 
-         % error_train(i) and error_val(i)
-%           theta = trainLinearReg(X(1:i, :), y(1:i), lambda);
-%           [J grad] = linearRegCostFunction(Xval, yval, theta, 0);
-%           [J grad] = linearRegCostFunction(X(1:i, :), y(1:i), theta, 0);
-         
-%         [theta J_hist] = gradient_descent(X_train(1:i, :), y_train(1:i), ...
-%         init_theta, alpha, num_iters, lambda);
-      
-   
-%Concretely, to determine the training error and cross validation error for
-%i examples, you should first randomly select i examples from the training set
-%and i examples from the cross validation set. You will then learn the param-
-%eters θ using the randomly chosen training set and evaluate the parameters
-%θ on the randomly chosen training set and cross validation set. The above
-%steps should then be repeated multiple times (say 50) and the averaged error
-%should be used to determine the training error and cross validation error for
-%i examples.
-%For this optional (ungraded) exercise, you should implement the above
-%strategy for computing the learning curves. For reference, figure 10 shows the
-%learning curve we obtained for polynomial regression with λ = 0.01. Your
-%figure may differ slightly due to the random selection of examples.
-%You do not need to submit any solutions for this optional (ungraded)
-%exercise.
+  temp_error_train = zeros(1, 50);
+  temp_error_val = zeros(1, 50);
+  
+  alpha = 0.1;
+  num_iters = 150;
+  for i = 1:m
 
-         [rand_X_train rand_y_train] = rand_select_i(X_train, y_train, i);
-         
+  % the training and cross validation errors are given as 
+  % the average value of i randomly chosen examples. a 
+  % random sample is given 50 times over, and the error
+  % is given as the mean of those 50 times, to minimise
+  % the risk of outliers.  
+    for j = 1:50
 
-         [rand_X_cv rand_y_cv] = rand_select_i(X_cv, y_cv, i);
-         
-         
+      % randomly pick i examples from training and cross validation/
+      % test set
+      [rand_X_train rand_y_train] = rand_select_i(X_train, y_train, i);
+      [rand_X_cv rand_y_cv] = rand_select_i(X_cv, y_cv, i);
 
-         theta = train_linear_reg(rand_X_train, rand_y_train, lambda);
+      % train using the i examples + own implemented gradient descent
+%      theta = gradient_descent(rand_X_train, rand_y_train, ...
+%      init_theta, alpha, num_iters, lambda);
 
-         
-         J = cost_func(rand_X_train, rand_y_train, theta, 0);
-         
-         error_train(i) = J;
 
-         J = cost_func(X_cv, y_cv, theta, 0);           
-         error_val(i) = J;
-         
-         
-      end 
-         
-         
-     end
+% alternative solution - using library function
+%      theta = trainLinearReg(rand_X_train, rand_y_train, lambda);
+
+
+% alternative solution - using normal equation
+      theta = normal_eqn(rand_X_train, rand_y_train);
+     
+%      fprintf('theta = [%f %f %f %f %f %f %f]\n', theta(1), theta(2), theta(3), ...
+%      theta(4), theta(5), theta(6), theta(7));
+      J = cost_func(rand_X_train, rand_y_train, theta, 0);
+      temp_error_train(j) = J;
+%      fprintf('temp error train(%f) = %f\n', j, J);
+%      error_train(i) = J;
+
+      J = cost_func(rand_X_cv, rand_y_cv, theta, 0);
+      temp_error_val(j) = J;
+%      fprintf('temp error val(%f) = %f\n', j, J);              
+%      error_val(i) = J;
+       
+       
+    end
+    fprintf('\n\n');
+    error_train(i) = mean(temp_error_train);
+    error_val(i) = mean(temp_error_val); 
+       
+  end
 end
