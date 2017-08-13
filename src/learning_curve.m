@@ -4,26 +4,27 @@
 % error as m x 1 vectors  for training set sizes of 1 ... m.
 % The training uses regularization parameter lambda, and
 % for earch training set size i it chooses i random examples.
-function [error_train, error_val m] = ...
+function [error_train, error_val] = ...
 learning_curve(X_train, y_train, X_cv, y_cv, lambda)
 
   m_train = size(X_train, 1);
-  m_cv = size(X_cv, 1);
 
-  m = min(m_train, m_cv);
+%  m_cv = size(X_cv, 1);
 
-  error_train = zeros(m, 1);
-  error_val   = zeros(m, 1);
+%  m = min(m_train, m_cv);
+
+  error_train = zeros(m_train, 1);
+  error_val   = zeros(m_train, 1);
 
   init_theta = [1 ; zeros(size(X_train, 2)-1, 1)];
 
   temp_error_train = zeros(1, 50);
   temp_error_val = zeros(1, 50);
   
-  alpha = 0.1;
+  alpha = 0.01;
   num_iters = 150;
-  for i = 1:m
-
+  for i = 1:m_train
+  
   % the training and cross validation errors are given as 
   % the average value of i randomly chosen examples. a 
   % random sample is given 50 times over, and the error
@@ -34,35 +35,28 @@ learning_curve(X_train, y_train, X_cv, y_cv, lambda)
       % randomly pick i examples from training and cross validation/
       % test set
       [rand_X_train rand_y_train] = rand_select_i(X_train, y_train, i);
-      [rand_X_cv rand_y_cv] = rand_select_i(X_cv, y_cv, i);
+%      [rand_X_cv rand_y_cv] = rand_select_i(X_cv, y_cv, i);
 
-      % train using the i examples + own implemented gradient descent
-%      theta = gradient_descent(rand_X_train, rand_y_train, ...
-%      init_theta, alpha, num_iters, lambda);
+      %==== train using the i examples =======%
+      % (1) using own implemented gradient descent
+      theta = gradient_descent(rand_X_train, rand_y_train, ...
+      init_theta, alpha, num_iters, lambda);
 
-
-% alternative solution - using library function
+      % (2) alternative solution - using 'library' function
 %      theta = trainLinearReg(rand_X_train, rand_y_train, lambda);
 
-
-% alternative solution - using normal equation
-      theta = normal_eqn(rand_X_train, rand_y_train);
-     
-%      fprintf('theta = [%f %f %f %f %f %f %f]\n', theta(1), theta(2), theta(3), ...
-%      theta(4), theta(5), theta(6), theta(7));
+      % (3) alternative solution - using normal equation
+%      theta = normal_eqn(rand_X_train, rand_y_train);
+      %=======================================%
+      
       J = cost_func(rand_X_train, rand_y_train, theta, 0);
       temp_error_train(j) = J;
-%      fprintf('temp error train(%f) = %f\n', j, J);
-%      error_train(i) = J;
 
-      J = cost_func(rand_X_cv, rand_y_cv, theta, 0);
+      J = cost_func(X_cv, y_cv, theta, 0);
       temp_error_val(j) = J;
-%      fprintf('temp error val(%f) = %f\n', j, J);              
-%      error_val(i) = J;
-       
        
     end
-    fprintf('\n\n');
+
     error_train(i) = mean(temp_error_train);
     error_val(i) = mean(temp_error_val); 
        

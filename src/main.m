@@ -8,11 +8,6 @@ clear ; close all; clc
 [a, b, c, d, e, f, g, h, i, j] = textread ('machine.txt', ...
 "%s %s %f %f %f %f %f %f %f %f", "delimiter", ",");
 
-
-% 1st degree polynomial = Test error: 446.598413
-% log(c) d e f g h = Test error: 435.939121
-
-
 % 3. MYCT: machine cycle time in nanoseconds (integer) -- log?
 % 4. MMIN: minimum main memory in kilobytes (integer) -- linear?
 % 5. MMAX: maximum main memory in kilobytes (integer) -- linear?
@@ -41,23 +36,23 @@ clear ; close all; clc
 %% gradient descent
   % starting with zero for all features and
   % an intercept term
-  n = size(X, 2); % number of features  
-  init_theta = [1 ; zeros(n-1, 1)];
-  alpha = 0.1;
-  num_iters = 200;
-  
-  [theta J_hist] = gradient_descent(X_train, y_train, ...
-  init_theta, alpha, num_iters, 0);
-  %% plot the value of J_hist to see how the cost is decreasing
-  % to make sure gradient descent is working
-  figure;
-  plot(1:numel(J_hist), J_hist, '-b', 'LineWidth', 2);
-  xlabel('Number of iterations');
-  ylabel('Cost');
-  hold off;
-  
-  fprintf('Program paused. Press enter to continue.\n');
-  pause;
+%  n = size(X, 2); % number of features  
+%  init_theta = [1 ; zeros(n-1, 1)];
+%  alpha = 0.1;
+%  num_iters = 200;
+%  
+%  [theta J_hist] = gradient_descent(X_train, y_train, ...
+%  init_theta, alpha, num_iters, 0);
+%  %% plot the value of J_hist to see how the cost is decreasing
+%  % to make sure gradient descent is working
+%  figure;
+%  plot(1:numel(J_hist), J_hist, '-b', 'LineWidth', 2);
+%  xlabel('Number of iterations');
+%  ylabel('Cost');
+%  hold off;
+%  
+%  fprintf('Program paused. Press enter to continue.\n');
+%  pause;
 
 % alternative solution - using normal equation
 %  theta = normal_eqn(X_train, y_train);
@@ -76,23 +71,25 @@ clear ; close all; clc
 
 %% if possible - plot linear regression fit -
 % works if there is only one feature
-if size(X, 2) <= 2
-  figure;
-  plot(X(:,2), y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
-  xlabel('Machine cycle time in ns');
-  ylabel('Published relative performance');
-  hold on;
-  plot(X(:,2), X*theta, '--', 'LineWidth', 2);
-  legend('Training data', 'Linear regression')
-  hold off;
-endif
+%if size(X, 2) <= 2
+%  figure;
+%  plot(X(:,2), y, 'rx', 'MarkerSize', 10, 'LineWidth', 1.5);
+%  xlabel('Machine cycle time in ns');
+%  ylabel('Published relative performance');
+%  hold on;
+%  plot(X(:,2), X*theta, '--', 'LineWidth', 2);
+%  legend('Training data', 'Linear regression')
+%  hold off;
+%endif
 
 
-%% Plot learning curves
+%%=========== Plot learning curves ===========%%
 
 % Plot cross validation error
-  lambda = 2;
-  [error_train, error_val, m] = ...
+  
+  m = size(X_train, 1);
+  lambda = 8;
+  [error_train, error_val] = ...
       learning_curve(X_train, y_train, ...
                     X_cv, y_cv, ...
                     lambda);
@@ -103,7 +100,7 @@ endif
   legend('Train', 'Cross Validation')
   xlabel('Number of training examples')
   ylabel('Error')
-  axis([0 42 0 10000])
+  axis([0 126 0 10000])
 
   fprintf('Program paused. Press enter to continue.\n');
   pause;

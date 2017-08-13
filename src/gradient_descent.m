@@ -11,13 +11,14 @@ function [theta J_hist] = gradient_descent(X, y, init_theta, alpha, num_iters, l
     J_hist = zeros(num_iters, 1);
     n = size(X, 2); % number of features
     m = size(X, 1); % number of training examples
-    
+
     for iter = 1:num_iters
 
       % temp: stores the value of the gradient
       temp = theta;
       for ii = 1:n
-        temp(ii) = (alpha/m) * sum( (X * theta - y)' * X(:, ii));
+        diff = X * theta - y;
+        temp(ii) = (alpha/m) * sum( diff' * X(:, ii));
       end
       
       theta = theta - temp;
