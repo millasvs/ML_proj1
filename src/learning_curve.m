@@ -9,10 +9,6 @@ learning_curve(X_train, y_train, X_cv, y_cv, lambda)
 
   m_train = size(X_train, 1);
 
-%  m_cv = size(X_cv, 1);
-
-%  m = min(m_train, m_cv);
-
   error_train = zeros(m_train, 1);
   error_val   = zeros(m_train, 1);
 
@@ -35,19 +31,10 @@ learning_curve(X_train, y_train, X_cv, y_cv, lambda)
       % randomly pick i examples from training and cross validation/
       % test set
       [rand_X_train rand_y_train] = rand_select_i(X_train, y_train, i);
-%      [rand_X_cv rand_y_cv] = rand_select_i(X_cv, y_cv, i);
 
-      %==== train using the i examples =======%
-      % (1) using own implemented gradient descent
+      % train them using gradient descent
       theta = gradient_descent(rand_X_train, rand_y_train, ...
       init_theta, alpha, num_iters, lambda);
-
-      % (2) alternative solution - using 'library' function
-%      theta = trainLinearReg(rand_X_train, rand_y_train, lambda);
-
-      % (3) alternative solution - using normal equation
-%      theta = normal_eqn(rand_X_train, rand_y_train);
-      %=======================================%
       
       J = cost_func(rand_X_train, rand_y_train, theta, 0);
       temp_error_train(j) = J;

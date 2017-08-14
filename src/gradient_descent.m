@@ -11,7 +11,7 @@ function [theta J_hist] = gradient_descent(X, y, init_theta, alpha, num_iters, l
     J_hist = zeros(num_iters, 1);
     n = size(X, 2); % number of features
     m = size(X, 1); % number of training examples
-
+    
     for iter = 1:num_iters
 
       % temp: stores the value of the gradient
@@ -24,7 +24,9 @@ function [theta J_hist] = gradient_descent(X, y, init_theta, alpha, num_iters, l
       theta = theta - temp;
 
 %TODO: introduce lambda to the regularization itself      
-%      reg = (lambda*theta) / m;
+      reg = (lambda*theta) / m;
+      reg(1) = 0;
+      theta = theta + reg;
 
       
       % Save the cost J in every iteration    
