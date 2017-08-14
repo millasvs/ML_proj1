@@ -1,5 +1,5 @@
-%VALIDATIONCURVE Generate the train and validation errors needed to
-%plot a validation curve that we can use to select lambda
+%% Generate the train and validation errors needed to
+%% plot a validation curve that we can use to select lambda
 function [lambda_vec, error_train, error_val] = ...
     validation_curve(X_train, y_train, X_cv, y_cv)
 
@@ -20,6 +20,7 @@ num_iters = 150;
 %    theta = gradient_descent(X_train, y_train, ...
 %    init_theta, alpha, num_iters, lambda);
 
+    % train using built-in function
     theta = train_linear_reg(X_train, y_train, lambda);
     J = cost_func(X_train, y_train, theta, 0);
     error_train(i) = J;

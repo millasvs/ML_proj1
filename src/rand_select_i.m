@@ -1,5 +1,5 @@
 %% Randomly select i training examples from X and y data sets,
-% where X are the features and y is the thing we want to predict
+%% where X are the features and y is the thing we want to predict
 
 function [X_i y_i] = rand_select_i(X, y, i)
 
